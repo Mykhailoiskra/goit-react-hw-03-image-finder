@@ -1,49 +1,71 @@
 import "./ImageGalleryStyles.css";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { Component } from "react";
+import Loader from "react-loader-spinner";
+import { toast } from "react-toastify";
 import ImageGalleryItem from "../ImageGalleryItem";
+import API from "../../services/pixabay-api";
 
 export default class ImageGallery extends Component {
   state = {
     pictures: [],
     page: 1,
-    loading: false,
+    error: null,
+    status: "idle",
   };
 
   componentDidUpdate(prevProps, prevState) {
     const prevQuery = prevProps.query;
     const nextQuery = this.props.query;
-    const BASE_URL = "https://pixabay.com/api/";
-    const API_KEY = "19028300-83b376d79bd6a99c9e2183deb";
 
     if (prevQuery !== nextQuery) {
-      this.setState({ loading: true });
+      this.setState({ status: "pending" });
 
-      fetch(
-        `${BASE_URL}?image_type=photo&orientation=horizontal&q=${nextQuery}&page=${this.state.page}&per_page=12&key=${API_KEY}`
-      )
-        .then((res) => res.json())
-        .then((res) => this.setState({ pictures: res.hits }))
+      API.fetchPictures(nextQuery, this.state.page)
+        .then((res) =>
+          this.setState({ pictures: res.hits, status: "resolved" })
+        )
+        .catch((error) => this.setState({ error, status: "rejected" }))
         .finally(this.setState({ loading: false }));
     }
   }
 
   render() {
-    const { pictures, loading } = this.state;
-    return (
-      <>
-        {loading && <p className="loadingSpinner">Loading...</p>}
-        {pictures && (
-          <ul className="ImageGallery">
-            {pictures.map((picture) => (
-              <ImageGalleryItem
-                id={picture.id}
-                url={picture.webformatURL}
-                tags={picture.tags}
-              />
-            ))}
-          </ul>
-        )}
-      </>
-    );
+    const { pictures, error, status } = this.state;
+
+    if (status === "idle") {
+      return <div>Let's find some nice pictures!</div>;
+    }
+
+    if (status === "pending") {
+      return (
+        <Loader
+          type="ThreeDots"
+          color="#00BFFF"
+          height={120}
+          width={120}
+          style={{ textAlign: "center" }}
+        />
+      );
+    }
+    if (status === "rejected") {
+      return toast.error(error);
+    }
+
+    if (status === "resolved" && pictures.length !== 0) {
+      return (
+        <ul className="ImageGallery">
+          {pictures.map((picture) => (
+            <ImageGalleryItem
+              id={picture.id}
+              url={picture.webformatURL}
+              tags={picture.tags}
+            />
+          ))}
+        </ul>
+      );
+    } else {
+      return <div>We didn't find such picture...</div>;
+    }
   }
 }
