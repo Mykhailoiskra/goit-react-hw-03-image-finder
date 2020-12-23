@@ -1,4 +1,5 @@
 import "./ImageGalleryItemStyles.css";
+import PropTypes from "prop-types";
 
 const ImageGalleryItem = ({ id, url, tags, largeImgUrl }) => {
   return (
@@ -14,3 +15,10 @@ const ImageGalleryItem = ({ id, url, tags, largeImgUrl }) => {
 };
 
 export default ImageGalleryItem;
+
+ImageGalleryItem.propTypes = {
+  id: PropTypes.string,
+  url: PropTypes.string,
+  tags: PropTypes.string,
+  largeImgUrl: PropTypes.string,
+};

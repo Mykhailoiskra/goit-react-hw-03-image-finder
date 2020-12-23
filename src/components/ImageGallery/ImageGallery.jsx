@@ -1,11 +1,16 @@
+// Styles
 import "./ImageGalleryStyles.css";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
+// Utilities components
 import { Component } from "react";
-import Loader from "react-loader-spinner";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
+
+// Custom Components
+import Loader from "react-loader-spinner";
 import ImageGalleryItem from "../ImageGalleryItem";
 import Button from "../Button";
-// import API from "../../services/pixabay-api";
 
 export default class ImageGallery extends Component {
   handleImageClick = (evt) => {
@@ -18,7 +23,7 @@ export default class ImageGallery extends Component {
     const { pictures, error, status } = this.props;
 
     if (status === "idle") {
-      return <div>Let's find some nice pictures!</div>;
+      return <div className="message">Let's find some nice pictures!</div>;
     }
 
     if (status === "pending") {
@@ -53,41 +58,15 @@ export default class ImageGallery extends Component {
         </>
       );
     } else {
-      return <div>We didn't find such picture...</div>;
+      return <div className="message">We didn't find such picture...</div>;
     }
   }
 }
-// handleLoadMore = () => {
-//   this.setState(({ page }) => ({ page: page + 1 }));
-// };
-// componentDidUpdate(prevProps, prevState) {
-//   const prevQuery = prevProps.query;
-//   const currentQuery = this.props.query;
 
-//   if (prevQuery !== currentQuery) {
-//     this.setState({ status: "pending", page: 1 });
-
-//     API.fetchPictures(currentQuery, this.state.page)
-//       .then((res) =>
-//         this.setState({
-//           pictures: res.hits,
-//           status: "resolved",
-//         })
-//       )
-//       .catch((error) => this.setState({ error, status: "rejected" }));
-//   } else if (prevState.page !== this.state.page) {
-//     API.fetchPictures(this.props.query, this.state.page)
-//       .then((res) =>
-//         this.setState(({ pictures }) => ({
-//           pictures: [...pictures, ...res.hits],
-//           status: "resolved",
-//         }))
-//       )
-//       .catch((error) => this.setState({ error, status: "rejected" }));
-//   }
-
-//   window.scrollTo({
-//     top: document.documentElement.scrollHeight,
-//     behavior: "smooth",
-//   });
-// }
+ImageGallery.propTypes = {
+  pictures: PropTypes.array,
+  status: PropTypes.string,
+  error: PropTypes.string,
+  onClick: PropTypes.func,
+  onLoadMore: PropTypes.func,
+};

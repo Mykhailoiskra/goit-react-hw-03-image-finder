@@ -21,6 +21,7 @@ export default class App extends Component {
       url: "",
       alt: "",
     },
+    scrollPoint: 0,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -32,10 +33,14 @@ export default class App extends Component {
 
       this.fetchPictures();
     }
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: "smooth",
-    });
+
+    if (prevState.page !== this.state.page) {
+      window.scrollTo({
+        top: this.state.scrollPoint,
+        left: 0,
+        behavior: "smooth",
+      });
+    }
   }
 
   fetchPictures = () => {
@@ -45,6 +50,7 @@ export default class App extends Component {
           pictures: [...pictures, ...res.hits],
           status: "resolved",
           page: page + 1,
+          scrollPoint: document.body.clientHeight,
         }))
       )
       .catch((error) => this.setState({ error, status: "rejected" }));
