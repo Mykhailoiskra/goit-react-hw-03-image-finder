@@ -47,7 +47,7 @@ export default class ImageGallery extends Component {
           <ul className="ImageGallery" onClick={this.handleImageClick}>
             {pictures.map((picture) => (
               <ImageGalleryItem
-                id={picture.id}
+                id={toString(picture.id)}
                 url={picture.webformatURL}
                 tags={picture.tags}
                 largeImgUrl={picture.largeImageURL}
@@ -64,9 +64,9 @@ export default class ImageGallery extends Component {
 }
 
 ImageGallery.propTypes = {
-  pictures: PropTypes.array,
-  status: PropTypes.string,
+  pictures: PropTypes.arrayOf(PropTypes.object),
+  status: PropTypes.string.isRequired,
   error: PropTypes.string,
-  onClick: PropTypes.func,
-  onLoadMore: PropTypes.func,
+  onClick: PropTypes.func.isRequired,
+  onLoadMore: PropTypes.func.isRequired,
 };

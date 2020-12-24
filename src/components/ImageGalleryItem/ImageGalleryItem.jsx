@@ -17,8 +17,8 @@ const ImageGalleryItem = ({ id, url, tags, largeImgUrl }) => {
 export default ImageGalleryItem;
 
 ImageGalleryItem.propTypes = {
-  id: PropTypes.string,
-  url: PropTypes.string,
-  tags: PropTypes.string,
-  largeImgUrl: PropTypes.string,
+  id: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  tags: PropTypes.string.isRequired,
+  largeImgUrl: PropTypes.string.isRequired,
 };
