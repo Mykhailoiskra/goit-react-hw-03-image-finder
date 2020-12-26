@@ -13,6 +13,14 @@ import ImageGalleryItem from "../ImageGalleryItem";
 import Button from "../Button";
 
 export default class ImageGallery extends Component {
+  static propTypes = {
+    pictures: PropTypes.arrayOf(PropTypes.object),
+    status: PropTypes.string.isRequired,
+    error: PropTypes.string,
+    onClick: PropTypes.func.isRequired,
+    onLoadMore: PropTypes.func.isRequired,
+  };
+
   handleImageClick = (evt) => {
     if (evt.target.tagName === "IMG") {
       this.props.onClick(evt.target.dataset.url, evt.target.alt);
@@ -62,11 +70,3 @@ export default class ImageGallery extends Component {
     }
   }
 }
-
-ImageGallery.propTypes = {
-  pictures: PropTypes.arrayOf(PropTypes.object),
-  status: PropTypes.string.isRequired,
-  error: PropTypes.string,
-  onClick: PropTypes.func.isRequired,
-  onLoadMore: PropTypes.func.isRequired,
-};

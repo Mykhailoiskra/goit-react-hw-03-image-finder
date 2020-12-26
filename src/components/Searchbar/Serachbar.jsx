@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 
 export default class SearchBar extends Component {
+  static propTypes = { onSubmit: PropTypes.func };
+
   state = {
     input: "",
   };
@@ -44,5 +46,3 @@ export default class SearchBar extends Component {
     );
   }
 }
-
-SearchBar.propTypes = { onSubmit: PropTypes.func };
